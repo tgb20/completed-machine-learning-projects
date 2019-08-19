@@ -1,3 +1,6 @@
 {
-    "python.pythonPath": "/Users/jacobbashista/.local/share/virtualenvs/ML-CV-Templates-Bq2V7FJf/bin/python"
+    "python.pythonPath": "/Users/jacobbashista/.local/share/virtualenvs/ML-CV-Templates-Bq2V7FJf/bin/python",
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true
 }
