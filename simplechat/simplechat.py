@@ -1,4 +1,5 @@
 # Sourced from https://en.wikipedia.org/wiki/Robot
+import re
 
 prompts = {
     "what": "What is a robot?",
@@ -19,7 +20,44 @@ responses = {
 
 
 def processInput(userInput):
-    pass
+    # If its not whitespace or alphanumeric get rid of it
+    userInput = re.sub(r'[^\w\s]', '', userInput)
+
+    words = userInput.split(" ")
+    #print(words)
+    matchingKeys = []
+
+    for word in words:
+        if word in responses.keys():
+            matchingKeys.append(word)
+
+    if len(matchingKeys) == 0:
+        return "I don't know that"
+    elif len(matchingKeys) == 1:
+        return responses[matchingKeys[0]]
+    else:
+        print("I am not sure what you mean. Did you mean: ")
+        index = 1
+
+        for key in matchingKeys:
+            print(str(index) + ": " + prompts[key])
+            index += 1
+        
+        valid = False
+
+        while not valid:
+            selected = int(input("#: "))
+
+            if selected <= len(matchingKeys) and selected > 0:
+                valid = True
+            else:
+                print("Please enter one of the above")
+                
+        return responses[matchingKeys[selected - 1]]
+
+
+
+
 
 def main():
     print("Welcome to Robot Facts! I can talk to you about robots\n")
