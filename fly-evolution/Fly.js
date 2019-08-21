@@ -9,6 +9,11 @@ class Fly {
         this.food = food;
         this.fitness = 0;
         this.hitSomething = false;
+        this.gotFood = false;
+
+        this.searchingColor = color(255, 150);
+        this.foundColor = color(0, 255, 0, 150);
+        this.hitColor = color(255, 0, 0, 150);
     }
 
     calcFitness() {
@@ -27,7 +32,7 @@ class Fly {
     }
 
     update(count, wall) {
-        if(!this.hitSomething){
+        if (!this.hitSomething) {
             // If we haven't hit something we can move
             this.applyForce(this.dna.genes[count]);
             this.vel.add(this.acc);
@@ -35,17 +40,18 @@ class Fly {
             this.acc.mult(0);
         }
         // Hit Edges
-        if(this.pos.y > height || this.pos.y < 0 || this.pos.x > width || this.pos.x < 0){
+        if (this.pos.y > height || this.pos.y < 0 || this.pos.x > width || this.pos.x < 0) {
             this.hitSomething = true;
         }
         // Hit Wall
-        if(wall.hitWall(this.pos.x, this.pos.y)){
+        if (wall.hitWall(this.pos.x, this.pos.y)) {
             this.hitSomething = true;
         }
 
         // Check Food
         let distance = dist(this.pos.x, this.pos.y, this.food.pos.x, this.food.pos.y);
-        if(distance < this.food.radius){
+        if (distance < this.food.radius) {
+            this.gotFood = true;
             this.hitSomething = true;
         }
 
@@ -60,10 +66,19 @@ class Fly {
         push();
         noStroke();
         translate(this.pos.x, this.pos.y);
-        fill(0);
+        fill(255);
+        textSize(10);
         text(this.fitness.toFixed(1), 0, 0);
         rotate(this.vel.heading());
-        fill(252, 144, 3, 150);
+
+        if (this.gotFood) {
+            fill(this.foundColor);
+        } else if (this.hitSomething) {
+            fill(this.hitColor);
+        } else {
+            fill(this.searchingColor);
+        }
+
         rectMode(CENTER);
         rect(0, 0, 25, 15);
         pop();
