@@ -26,10 +26,6 @@ class Dino {
 
         let groundPos = this.calcGroundPosition();
 
-        if(!this.playerControlled){
-            this.think(closestCactus);
-        }
-
         if (this.pos.y >= groundPos) {
             this.pos.y = groundPos;
             this.vel.y = 0;
@@ -37,6 +33,11 @@ class Dino {
 
         if (this.hitCactus(closestCactus)) {
             this.isAlive = false;
+        }
+
+        // FOR TOMORROW MOVE THIS HERE
+        if(!this.playerControlled){
+            this.think(closestCactus);
         }
     }
 
@@ -47,7 +48,7 @@ class Dino {
         let actions = this.brain.predict([distance, cactus.count]);
 
         let choice = actions.indexOf(Math.max(...actions)); // Get the index of the best prediciton
-
+        
         if(choice == 0){
             // Jump
             this.unDuck();
