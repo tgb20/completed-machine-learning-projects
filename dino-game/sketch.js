@@ -95,7 +95,6 @@ function getClosestCactus(dino) {
 
 function firstGeneration() {
     dinos = [];
-    for(let i = 0; i < 100; i++){
     dinos.push(new Dino(false, new NeuralNetwork(2, 4, 3)));
 }
 
