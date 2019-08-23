@@ -1,4 +1,7 @@
 let ground;
+let selection;
+
+const DINO_COUNT = 100;
 
 let dinos = [];
 let cacti = [];
@@ -14,8 +17,11 @@ function setup() {
 
     ground = new Ground();
 
-    spawnCactusFrame = 40;
+    spawnCactusFrame = int(random(40, 100));
+
     cacti.push(new Cactus());
+
+    selection = new Selection();
 
     firstGeneration();
 }
@@ -23,7 +29,7 @@ function setup() {
 function draw() {
     background(255);
 
-    score += 0.15;
+    score += 1;
 
     if (score > highScore) {
         highScore = score.toFixed(0)
@@ -71,15 +77,14 @@ function draw() {
 
         if (dinos[i].isAlive) {
             allDead = false;
-            dinos[i].update(getClosestCactus(dinos[i]));
+            dinos[i].update(getClosestCactus(dinos[i]), score);
             dinos[i].show();
         }
     }
 
-    if(allDead){
+    if(allDead || score == 2000){
         nextGeneration();
     }
-
 }
 
 function getClosestCactus(dino) {
@@ -95,14 +100,21 @@ function getClosestCactus(dino) {
 
 function firstGeneration() {
     dinos = [];
-    dinos.push(new Dino(false, new NeuralNetwork(2, 4, 3)));
+
+    for (let i = 0; i < DINO_COUNT; i++) {
+        dinos.push(new Dino(false, new NeuralNetwork(2, 4, 3)));
+    }
+
+    // dinos.push(new Dino(true)); // Our Player
 }
 
 function nextGeneration() {
-    dinos = [];
-    dinos.push(new Dino(false, new NeuralNetwork(2, 4, 3)));
 
-    spawnCactusFrame = frameCount + 40;
+    dinos = selection.createNewGeneration(DINO_COUNT, dinos, 0.99); // 0.99 is mutation rate
+
+    // dinos.push(new Dino(true)); // Our Player
+
+    spawnCactusFrame = frameCount + int(random(40, 100));
     cacti = [];
     cacti.push(new Cactus());
 
